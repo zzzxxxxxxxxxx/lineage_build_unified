@@ -68,9 +68,15 @@ echo ""
 fix_mke2fs() {
     local MKE2FS_BIN="out/soong/host/linux-x86/bin/mke2fs"
     local MKE2FS_CONF="out/soong/host/linux-x86/bin/mke2fs.conf"
-    if [ -f "$MKE2FS_BIN" ] && [ ! -L "$MKE2FS_BIN" ] && [ ! -f "${MKE2FS_BIN}.real" ]; then
-        # Create a minimal mke2fs.conf compatible with old mke2fs (no orphan_file)
-        cat > "$MKE2FS_CONF" << 'CONFEOF'
+    [ -f "$MKE2FS_BIN" ] || return 0
+
+    # If soong rebuilt mke2fs (ELF binary), back it up
+    if [ "$(head -c 4 "$MKE2FS_BIN")" = $'\x7fELF' ]; then
+        mv "$MKE2FS_BIN" "${MKE2FS_BIN}.real"
+    fi
+
+    # (Re)create minimal config and wrapper (idempotent)
+    cat > "$MKE2FS_CONF" << 'CONFEOF'
 [defaults]
 	base_features = sparse_super,large_file,filetype,resize_inode,dir_index,ext_attr
 	default_mntopts = acl,user_xattr
@@ -84,11 +90,9 @@ fix_mke2fs() {
 		features = has_journal,extent,huge_file,flex_bg,metadata_csum,metadata_csum_seed,64bit,dir_nlink,extra_isize
 	}
 CONFEOF
-        mv "$MKE2FS_BIN" "${MKE2FS_BIN}.real"
-        printf '#!/bin/bash\nexport MKE2FS_CONFIG="%s"\nexec "%s" "$@"\n' "$MKE2FS_CONF" "${MKE2FS_BIN}.real" > "$MKE2FS_BIN"
-        chmod +x "$MKE2FS_BIN"
-        echo "mke2fs wrapper installed"
-    fi
+    printf '#!/bin/bash\nexport MKE2FS_CONFIG="%s"\nexec "%s" "$@"\n' "$MKE2FS_CONF" "${MKE2FS_BIN}.real" > "$MKE2FS_BIN"
+    chmod +x "$MKE2FS_BIN"
+    echo "mke2fs wrapper ready"
 }
 echo ""
 
