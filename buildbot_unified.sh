@@ -63,6 +63,11 @@ ccache -M 50G
 echo "ccache enabled, max size: 50G"
 echo ""
 
+# Fix mke2fs incompatibility with newer host e2fsprogs config
+export MKE2FS_CONFIG=/dev/null
+echo "MKE2FS_CONFIG set to /dev/null"
+echo ""
+
 apply_patches() {
     echo "Applying patch group ${1}"
     bash ./lineage_build_unified/apply_patches.sh ./lineage_patches_unified/${1}
