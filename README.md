@@ -17,12 +17,16 @@ Initialize your LineageOS workspace:
 
 Clone both this and the patches repos:
 
-    git clone https://github.com/AndyCGYan/lineage_build_unified lineage_build_unified -b lineage-18.1
-    git clone https://github.com/AndyCGYan/lineage_patches_unified lineage_patches_unified -b lineage-18.1
+    git clone https://github.com/zzzxxxxxxxxxx/lineage_build_unified lineage_build_unified -b lineage-18.1
+    git clone https://github.com/zzzxxxxxxxxxx/lineage_patches_unified lineage_patches_unified -b lineage-18.1
 
-Finally, start the build script - for example, to build for all supported archs:
+Finally, start the build script - for example, to build for all supported archs (with `su`):
 
-    bash lineage_build_unified/buildbot_unified.sh treble 32B 32BO A64B A64BG A64BO 64B 64BG
+    bash lineage_build_unified/buildbot_unified.sh treble arm_bvS arm_boS a64_bvS a64_bgS a64_boS arm64_bvS arm64_bgS
+
+Or without `su` (use `N` suffix):
+
+    bash lineage_build_unified/buildbot_unified.sh treble arm_bvN arm_boN a64_bvN a64_bgN a64_boN arm64_bvN arm64_bgN
 
 Be sure to update the cloned repos from time to time!
 

@@ -48,7 +48,7 @@ cp ./lineage_build_unified/local_manifests_${MODE}/*.xml .repo/local_manifests
 echo ""
 
 echo "Syncing repos"
-repo sync -c --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+repo sync -c --force-sync --no-clone-bundle --no-tags -j4
 echo ""
 
 echo "Setting up build environment"
@@ -83,21 +83,18 @@ finalize_treble() {
 }
 
 build_device() {
+    if [[ ${1} == *N* ]]; then
+        WITH_SU=false
+    fi
     brunch ${1}
     mv $OUT/lineage-*.zip ~/build-output/lineage-18.1-$BUILD_DATE-UNOFFICIAL-${1}$($PERSONAL && echo "-personal" || echo "").zip
 }
 
 build_treble() {
-    case "${1}" in
-        ("32B") TARGET=arm_bvS;;
-        ("32BO") TARGET=arm_boS;;
-        ("A64B") TARGET=a64_bvS;;
-        ("A64BG") TARGET=a64_bgS;;
-        ("A64BO") TARGET=a64_boS;;
-        ("64B") TARGET=arm64_bvS;;
-        ("64BG") TARGET=arm64_bgS;;
-        (*) echo "Invalid target - exiting"; exit 1;;
-    esac
+    TARGET=${1}
+    if [[ ${TARGET} == *N* ]]; then
+        WITH_SU=false
+    fi
     lunch lineage_${TARGET}-userdebug
     make installclean
     make -j$(nproc --all) systemimage
