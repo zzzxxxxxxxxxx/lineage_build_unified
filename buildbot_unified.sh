@@ -61,12 +61,19 @@ prep_build() {
     echo ""
 
     echo "Syncing repos"
-    repo sync -c --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+    repo sync -c --force-sync --no-clone-bundle --no-tags -j4
     echo ""
 
     echo "Setting up build environment"
     source build/envsetup.sh &> /dev/null
     mkdir -p ~/build-output
+    echo ""
+
+    echo "Enabling ccache"
+    export USE_CCACHE=1
+    export CCACHE_EXEC=$(which ccache)
+    ccache -M 50G
+    echo "ccache enabled, max size: 50G"
     echo ""
 
     repopick -t twelve-burnin -r -f
@@ -110,7 +117,40 @@ finalize_treble() {
     cd ../..
 }
 
+# Fix mke2fs incompatibility with newer host e2fsprogs config
+# soong_ui filters env vars, so we wrap the mke2fs binary instead
+fix_mke2fs() {
+    local MKE2FS_BIN="out/soong/host/linux-x86/bin/mke2fs"
+    local MKE2FS_CONF="out/soong/host/linux-x86/bin/mke2fs.conf"
+    [ -f "$MKE2FS_BIN" ] || return 0
+
+    # If soong rebuilt mke2fs (ELF binary), back it up
+    if [ "$(head -c 4 "$MKE2FS_BIN")" = $'\x7fELF' ]; then
+        mv "$MKE2FS_BIN" "${MKE2FS_BIN}.real"
+    fi
+
+    # (Re)create minimal config and wrapper (idempotent)
+    cat > "$MKE2FS_CONF" << 'CONFEOF'
+[defaults]
+	base_features = sparse_super,large_file,filetype,resize_inode,dir_index,ext_attr
+	default_mntopts = acl,user_xattr
+	enable_periodic_fsck = 0
+	blocksize = 4096
+	inode_size = 256
+	inode_ratio = 16384
+
+[fs_types]
+	ext4 = {
+		features = has_journal,extent,huge_file,flex_bg,metadata_csum,metadata_csum_seed,64bit,dir_nlink,extra_isize
+	}
+CONFEOF
+    printf '#!/bin/bash\nexport MKE2FS_CONFIG="%s"\nexec "%s" "$@"\n' "$MKE2FS_CONF" "${MKE2FS_BIN}.real" > "$MKE2FS_BIN"
+    chmod +x "$MKE2FS_BIN"
+    echo "mke2fs wrapper ready"
+}
+
 build_device() {
+    fix_mke2fs
     brunch ${1}
     mv $OUT/lineage-*.zip ~/build-output/lineage-19.1-$BUILD_DATE-UNOFFICIAL-${1}$($PERSONAL && echo "-personal" || echo "").zip
 }
@@ -127,6 +167,7 @@ build_treble() {
     esac
     lunch lineage_${TARGET}-userdebug
     make installclean
+    fix_mke2fs
     make -j$(lscpu -b -p=Core,Socket | grep -v '^#' | sort -u | wc -l) systemimage
     SIGNED=false
     if [ ${SIGNABLE} = true ] && [[ ${TARGET} == *_bg? ]]
