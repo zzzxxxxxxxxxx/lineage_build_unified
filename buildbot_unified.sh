@@ -56,6 +56,13 @@ source build/envsetup.sh &> /dev/null
 mkdir -p ~/build-output
 echo ""
 
+echo "Enabling ccache"
+export USE_CCACHE=1
+export CCACHE_EXEC=$(which ccache)
+ccache -M 50G
+echo "ccache enabled, max size: 50G"
+echo ""
+
 apply_patches() {
     echo "Applying patch group ${1}"
     bash ./lineage_build_unified/apply_patches.sh ./lineage_patches_unified/${1}
