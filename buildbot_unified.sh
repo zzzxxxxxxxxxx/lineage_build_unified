@@ -64,8 +64,16 @@ echo "ccache enabled, max size: 50G"
 echo ""
 
 # Fix mke2fs incompatibility with newer host e2fsprogs config
-export MKE2FS_CONFIG=/dev/null
-echo "MKE2FS_CONFIG set to /dev/null"
+# soong_ui filters env vars, so we wrap the mke2fs binary instead
+fix_mke2fs() {
+    local MKE2FS_BIN="out/soong/host/linux-x86/bin/mke2fs"
+    if [ -f "$MKE2FS_BIN" ] && [ ! -L "$MKE2FS_BIN" ] && [ ! -f "${MKE2FS_BIN}.real" ]; then
+        mv "$MKE2FS_BIN" "${MKE2FS_BIN}.real"
+        printf '#!/bin/bash\nexport MKE2FS_CONFIG=/dev/null\nexec "$(dirname "$0")/mke2fs.real" "$@"\n' > "$MKE2FS_BIN"
+        chmod +x "$MKE2FS_BIN"
+        echo "mke2fs wrapper installed"
+    fi
+}
 echo ""
 
 apply_patches() {
@@ -98,6 +106,7 @@ build_device() {
     if [[ ${1} == *N* ]]; then
         WITH_SU=false
     fi
+    fix_mke2fs
     brunch ${1}
     mv $OUT/lineage-*.zip ~/build-output/lineage-18.1-$BUILD_DATE-UNOFFICIAL-${1}$($PERSONAL && echo "-personal" || echo "").zip
 }
@@ -109,6 +118,7 @@ build_treble() {
     fi
     lunch lineage_${TARGET}-userdebug
     make installclean
+    fix_mke2fs
     make -j$(nproc --all) systemimage
     make vndk-test-sepolicy
     mv $OUT/system.img ~/build-output/lineage-18.1-$BUILD_DATE-UNOFFICIAL-${TARGET}$(${PERSONAL} && echo "-personal" || echo "").img
