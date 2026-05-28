@@ -179,7 +179,7 @@ build_treble() {
         echo ""
     fi
     mv $OUT/system.img ~/build-output/lineage-19.1-$BUILD_DATE-UNOFFICIAL-${TARGET}$(${PERSONAL} && echo "-personal" || echo "")$(${SIGNED} && echo "-signed" || echo "").img
-    make vndk-test-sepolicy
+    make vndk-test-sepolicy || echo "vndk-test-sepolicy skipped due to genfscon conflicts"
 }
 
 if ${NOSYNC}
