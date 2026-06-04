@@ -26,7 +26,13 @@ cp $BL/manifest.xml .repo/local_manifests/manifest.xml
 echo ""
 
 echo "Syncing repos"
-repo sync -c --force-sync --no-clone-bundle --no-tags -j$(nproc --all)
+set +e
+for i in 1 2 3; do
+    repo sync -c --force-sync --no-clone-bundle --no-tags -j4 && break
+    echo "Repo sync failed, retrying ($i/3)..."
+    sleep 10
+done
+set -e
 echo ""
 
 echo "Setting up build environment"
