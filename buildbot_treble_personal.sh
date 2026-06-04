@@ -155,7 +155,7 @@ sleep 5
 echo ""
 
 export WITHOUT_CHECK_API=true
-export WITH_SU=true
+export WITH_SU=false
 mkdir -p ~/build-output/
 
 buildVariant() {
@@ -166,7 +166,7 @@ buildVariant() {
 	mv $OUT/system.img ~/build-output/lineage-17.1-$BUILD_DATE-UNOFFICIAL-${1}-personal.img
 }
 
-buildVariant treble_arm64_bvS
+buildVariant treble_arm64_bvN
 ls ~/build-output | grep 'lineage'
 rm -rf vendor/extra
 
