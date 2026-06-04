@@ -57,7 +57,7 @@ cd device/phh/treble
 git clean -fdx
 bash generate.sh lineage
 cd ../../..
-bash ~/treble_experimentations/apply-patches.sh treble_patches/patches
+bash ../treble_experimentations/apply-patches.sh treble_patches/patches
 echo ""
 
 echo "Applying universal patches"
