@@ -1,9 +1,15 @@
-From: LineageOS Builder <builder@lineageos.local>
-Date: Sun, 7 Jun 2026 20:30:00 +0800
+From d60911b3827b07674ee5c3c1afd3cced878b968a Mon Sep 17 00:00:00 2001
+From: zzzxxxxxxxxxx <2409974882@qq.com>
+Date: Sun, 7 Jun 2026 20:20:19 +0800
 Subject: [PATCH] Allow SELINUX_IGNORE_NEVERALLOWS in user builds for GSI
 
+Change-Id: Id043ce950e5b3d6d17f19c322eeaed9f5532cd9c
+---
+ Android.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
 diff --git a/Android.mk b/Android.mk
-index dadd7b0a..197f25c5 100644
+index dadd7b0a6..197f25c5e 100644
 --- a/Android.mk
 +++ b/Android.mk
 @@ -83,12 +83,7 @@ endif
@@ -19,5 +25,7 @@ index dadd7b0a..197f25c5 100644
 +# Allow user builds too for GSI (removed user restriction)
  NEVERALLOW_ARG := -N
  endif
+ 
 -- 
-2.25.1
+2.54.0
+
