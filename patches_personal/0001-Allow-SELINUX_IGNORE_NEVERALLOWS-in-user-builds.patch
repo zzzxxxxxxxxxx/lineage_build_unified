@@ -1,4 +1,4 @@
-From d4ac5c692a1983ead16b2d25afb09fab6722fa1d Mon Sep 17 00:00:00 2001
+From b36f1e0e74574ecf444d68cc491d920455f975f5 Mon Sep 17 00:00:00 2001
 From: zzzxxxxxxxxxx <2409974882@qq.com>
 Date: Sun, 7 Jun 2026 20:20:19 +0800
 Subject: [PATCH] Allow SELINUX_IGNORE_NEVERALLOWS in user builds for GSI
@@ -9,7 +9,7 @@ Change-Id: Id043ce950e5b3d6d17f19c322eeaed9f5532cd9c
  1 file changed, 3 insertions(+), 8 deletions(-)
 
 diff --git a/Android.mk b/Android.mk
-index dadd7b0a6..2d917465d 100644
+index dadd7b0a6..3fd98521c 100644
 --- a/Android.mk
 +++ b/Android.mk
 @@ -83,12 +83,7 @@ endif
@@ -31,7 +31,7 @@ index dadd7b0a6..2d917465d 100644
  		echo "List of invalid domains:" 1>&2; \
  		cat $@.permissivedomains 1>&2; \
 -		exit 1; \
-+		true \
++		true; \
  		fi
  	$(hide) mv $@.tmp $@
  
@@ -40,7 +40,7 @@ index dadd7b0a6..2d917465d 100644
  		echo "List of invalid domains:" 1>&2; \
  		cat $@.permissivedomains 1>&2; \
 -		exit 1; \
-+		true \
++		true; \
  		fi
  	$(hide) mv $@.tmp $@
  
