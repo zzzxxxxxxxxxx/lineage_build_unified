@@ -33,6 +33,8 @@ for i in 1 2 3; do
     sleep 10
 done
 set -e
+# 强制所有 repo 回到上游干净状态，确保补丁幂等
+repo forall -c 'git reset --hard HEAD 2>/dev/null || true' -j4
 echo ""
 
 echo "Setting up build environment"
