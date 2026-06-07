@@ -47,7 +47,7 @@ cd frameworks/native
 git am $BL/patches/0001-Revert-surfaceflinger-Add-support-for-extension-lib.patch
 cd ../..
 cd vendor/lineage
-git revert 612c5a846ea5aed339fe1275c119ee111faae78c --no-edit # soong: Add flag for fod extension
+git revert 612c5a846ea5aed339fe1275c119ee111faae78c --no-edit || true # soong: Add flag for fod extension
 cd ../..
 echo ""
 
@@ -83,7 +83,7 @@ cd build/make
 git am $BL/patches/0001-build-Don-t-handle-apns-conf.patch
 cd ../..
 cd device/phh/treble
-git revert 82b15278bad816632dcaeaed623b569978e9840d --no-edit # Update lineage.mk for LineageOS 16.0
+git revert 82b15278bad816632dcaeaed623b569978e9840d --no-edit || true # Update lineage.mk for LineageOS 16.0
 git am $BL/patches/0001-Remove-fsck-SELinux-labels.patch
 git am $BL/patches/0001-treble-Add-overlay-lineage.patch
 git am $BL/patches/0001-treble-Don-t-specify-config_wallpaperCropperPackage.patch
@@ -91,16 +91,16 @@ git am $BL/patches/0001-treble-Don-t-handle-apns-conf.patch
 git am $BL/patches/0001-TEMP-treble-Fix-init.treble-environ.rc-hardcode-for-.patch
 cd ../../..
 cd frameworks/native
-git revert 581c22f979af05e48ad4843cdfa9605186d286da --no-edit # Add suspend_resume trace events to the atrace 'freq' category.
+git revert 581c22f979af05e48ad4843cdfa9605186d286da --no-edit || true # Add suspend_resume trace events to the atrace 'freq' category.
 cd ../..
 cd hardware/lineage/interfaces
 git am $BL/patches/0001-cryptfshw-Remove-dependency-on-generated-kernel-head.patch
 cd ../../..
 cd system/hardware/interfaces
-git revert 5c145c49cc83bfe37c740bcfd3f82715ee051122 --no-edit # system_suspend: start early
+git revert 5c145c49cc83bfe37c740bcfd3f82715ee051122 --no-edit || true # system_suspend: start early
 cd ../../..
 cd system/sepolicy
-git revert d12551bf1a6e8a9ece6bbb98344a27bde7f9b3e1 --no-edit # sepolicy: Relabel wifi. properties as wifi_prop
+git revert d12551bf1a6e8a9ece6bbb98344a27bde7f9b3e1 --no-edit || true # sepolicy: Relabel wifi. properties as wifi_prop
 git am $BL/patches/0001-Revert-sepolicy-Address-denials-for-legacy-last_kmsg.patch
 cd ../..
 cd vendor/lineage
