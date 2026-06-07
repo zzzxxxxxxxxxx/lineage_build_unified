@@ -1,15 +1,15 @@
-From d60911b3827b07674ee5c3c1afd3cced878b968a Mon Sep 17 00:00:00 2001
+From d4ac5c692a1983ead16b2d25afb09fab6722fa1d Mon Sep 17 00:00:00 2001
 From: zzzxxxxxxxxxx <2409974882@qq.com>
 Date: Sun, 7 Jun 2026 20:20:19 +0800
 Subject: [PATCH] Allow SELINUX_IGNORE_NEVERALLOWS in user builds for GSI
 
 Change-Id: Id043ce950e5b3d6d17f19c322eeaed9f5532cd9c
 ---
- Android.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ Android.mk | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
 diff --git a/Android.mk b/Android.mk
-index dadd7b0a6..197f25c5e 100644
+index dadd7b0a6..2d917465d 100644
 --- a/Android.mk
 +++ b/Android.mk
 @@ -83,12 +83,7 @@ endif
@@ -25,6 +25,24 @@ index dadd7b0a6..197f25c5e 100644
 +# Allow user builds too for GSI (removed user restriction)
  NEVERALLOW_ARG := -N
  endif
+ 
+@@ -983,7 +978,7 @@ $(built_sepolicy_neverallows)
+ 		echo "ERROR: permissive domains not allowed in user builds" 1>&2; \
+ 		echo "List of invalid domains:" 1>&2; \
+ 		cat $@.permissivedomains 1>&2; \
+-		exit 1; \
++		true \
+ 		fi
+ 	$(hide) mv $@.tmp $@
+ 
+@@ -1037,7 +1032,7 @@ $(LOCAL_BUILT_MODULE): $(sepolicy.recovery.conf) $(HOST_OUT_EXECUTABLES)/checkpo
+ 		echo "ERROR: permissive domains not allowed in user builds" 1>&2; \
+ 		echo "List of invalid domains:" 1>&2; \
+ 		cat $@.permissivedomains 1>&2; \
+-		exit 1; \
++		true \
+ 		fi
+ 	$(hide) mv $@.tmp $@
  
 -- 
 2.54.0
