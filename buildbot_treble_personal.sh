@@ -148,6 +148,9 @@ cd vendor/lineage
 git am $BL/patches_personal/0001-vendor_lineage-Ignore-neverallows.-again.patch
 git am $BL/patches_personal/0001-build-Integrate-prop-modifications-2-2.patch
 cd ../..
+cd system/sepolicy
+git am $BL/patches_personal/0001-Allow-SELINUX_IGNORE_NEVERALLOWS-in-user-builds.patch
+cd ../..
 git clone https://github.com/kumikooumae/android_vendor_extra vendor/extra # SystemUIWithLegacyRecents
 echo ""
 
