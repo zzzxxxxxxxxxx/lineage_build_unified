@@ -151,6 +151,7 @@ cd ../..
 cd system/sepolicy
 git am $BL/patches_personal/0001-Allow-SELINUX_IGNORE_NEVERALLOWS-in-user-builds.patch
 cd ../..
+rm -rf vendor/extra
 git clone https://github.com/kumikooumae/android_vendor_extra vendor/extra # SystemUIWithLegacyRecents
 echo ""
 
