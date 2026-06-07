@@ -34,7 +34,7 @@ for i in 1 2 3; do
 done
 set -e
 # 强制所有 repo 回到上游干净状态，确保补丁幂等
-repo forall -c 'git reset --hard HEAD 2>/dev/null || true' -j4
+repo forall -c 'git reset --hard m/lineage-17.1 2>/dev/null || git reset --hard lineage/lineage-17.1 2>/dev/null || git reset --hard HEAD' -j4
 echo ""
 
 echo "Setting up build environment"
