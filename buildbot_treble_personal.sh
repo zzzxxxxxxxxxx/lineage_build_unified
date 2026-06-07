@@ -64,7 +64,8 @@ echo "Applying universal patches"
 cd frameworks/base
 git am $BL/patches/0001-UI-Revive-navbar-layout-tuning-via-sysui_nav_bar-tun.patch
 git am $BL/patches/0001-Disable-vendor-mismatch-warning.patch
-git am $BL/patches/0001-Allow-selective-signature-spoofing-for-microG.patch
+# 当前源码已内置 microG 签名伪造支持，无需此补丁
+# git am $BL/patches/0001-Allow-selective-signature-spoofing-for-microG.patch
 cd ../..
 cd lineage-sdk
 git am $BL/patches/0001-sdk-Invert-per-app-stretch-to-fullscreen.patch
